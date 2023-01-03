@@ -24,7 +24,6 @@ data(){
        viewers: this.viewers,
        favourite:false,
        like:false,
-       id:5,
      }
      this.$emit('createMovie',Movie)
      this.name = ""

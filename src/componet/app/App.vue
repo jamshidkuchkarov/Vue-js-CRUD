@@ -6,8 +6,9 @@
           <Search></Search>
           <AppFilter></AppFilter>
        </div>
-      <Movie :movies="movies"></Movie>
-       <MovieAddFrom @createMovie="createMovie"></MovieAddFrom>
+      <Movie :movies="movies" @onLike="onLikeHandler"></Movie>
+       <MovieAddFrom
+           @createMovie="createMovie" ></MovieAddFrom>
      </div>
   </div>
 </template>
@@ -42,7 +43,7 @@ export default {
          name:'amar',
          viewers: 880,
          favourite:true,
-         like:true,
+         like:false,
          id:2,
        },
        {
@@ -59,6 +60,14 @@ export default {
     createMovie(items){
       items.id = this.movies.length+1
       this.movies.push(items)
+    },
+    onLikeHandler(id){
+      const arr = this.movies.map(item => {
+        if(item.id==id){
+          item.like = !item.like
+        }
+
+      })
 
     }
   }
