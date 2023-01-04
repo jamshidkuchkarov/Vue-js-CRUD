@@ -19,6 +19,7 @@ data(){
 },
   methods:{
    channge(){
+     if(!this.name || !this.viewers) return
      const Movie = {
        name:this.name,
        viewers: this.viewers,

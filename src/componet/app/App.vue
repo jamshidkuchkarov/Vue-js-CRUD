@@ -6,7 +6,7 @@
           <Search></Search>
           <AppFilter></AppFilter>
        </div>
-      <Movie :movies="movies" @onLike="onLikeHandler"></Movie>
+      <Movie :movies="movies" @onToggle="onToggleHandler" @delete = "onRemove"></Movie>
        <MovieAddFrom
            @createMovie="createMovie" ></MovieAddFrom>
      </div>
@@ -61,14 +61,18 @@ export default {
       items.id = this.movies.length+1
       this.movies.push(items)
     },
-    onLikeHandler(id){
-      const arr = this.movies.map(item => {
+    onToggleHandler({id,prop}){
+      console.log(prop)
+      this.movies = this.movies.map(item => {
         if(item.id==id){
-          item.like = !item.like
+          return {...item,[prop]: !item[prop]}
         }
+        return item
 
       })
-
+    },
+    onRemove(id){
+      this.movies = this.movies.filter(c=>c.id!=id)
     }
   }
 }
