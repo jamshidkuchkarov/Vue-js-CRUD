@@ -3,10 +3,10 @@
      <div class="content">
         <AppInfo :allMoviesCount="movies.length" :allMoviesFavorite="movies.filter(c=>c.favourite).length"></AppInfo>
        <div class="search-panel">
-          <Search></Search>
-          <AppFilter></AppFilter>
+          <Search :updateTerm="updateTerm"></Search>
+          <AppFilter :filterName="filter" :upfilter="upfilter"></AppFilter>
        </div>
-      <Movie :movies="movies" @onToggle="onToggleHandler" @delete = "onRemove"></Movie>
+      <Movie :movies="onFilter(onSearchHandler(movies,term),filter)" @onToggle="onToggleHandler" @delete = "onRemove"></Movie>
        <MovieAddFrom
            @createMovie="createMovie" ></MovieAddFrom>
      </div>
@@ -48,12 +48,14 @@ export default {
        },
        {
          name:'umar',
-         viewers: 908,
+         viewers: 400,
          favourite:false,
          like:false,
          id:3,
        },
-     ]
+     ],
+     term:'',
+     filter:'all',
    }
  },
   methods:{
@@ -73,6 +75,31 @@ export default {
     },
     onRemove(id){
       this.movies = this.movies.filter(c=>c.id!=id)
+    },
+    onSearchHandler(arr,term){
+        if(term.length == 0){
+          return arr
+        }
+        return arr.filter(c=>c.name.toLowerCase().indexOf(term) > -1)
+    },
+    updateTerm(term){
+    this.term = term
+    },
+    onFilter(arr,filter){
+          switch (filter){
+            case 'popular':
+              return arr.filter(c => c.like==true)
+            break;
+            case 'moveViewers':
+              return arr.filter(c =>c.viewers>500)
+            break;
+            default:
+              return arr
+            break;
+          }
+    },
+    upfilter(filter){
+      this.filter = filter
     }
   }
 }
