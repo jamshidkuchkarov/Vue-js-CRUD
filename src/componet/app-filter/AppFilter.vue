@@ -1,8 +1,8 @@
 <template>
   <div class="btn-group mt-4">
-    <button @click="filterhandler('all')" class="btn btn-outline-dark " :class="[filterName=='all'?'active':'']">Barcha kinolar</button>
-    <button @click="filterhandler('popular')" class="btn btn-outline-dark" :class="[filterName=='popular'?'active':'']" >Mashhur kinolar</button>
-    <button @click="filterhandler('moveViewers')" class="btn btn-outline-dark" :class="[filterName=='moveViewers'?'active':'']" >Eng ko'p ko'rilgan</button>
+    <button v-for="btn in filterButtons " @click="filterhandler(btn.name)" class="btn btn-outline-dark" :key="btn.name" :class="[filterName==btn.name?'active':'']">
+     {{btn.title}}
+    </button>
   </div>
 </template>
 
@@ -20,7 +20,21 @@ props:{
 },
   data(){
   return{
-    filter:'all'
+    filter:'all',
+    filterButtons:[
+      {
+        title:"Barcha kinolar",
+        name:"all"
+      },
+      {
+        title:"Mashhur kinolar",
+        name:"popular"
+      },
+      {
+        title:"Eng ko'p ko'rilgan",
+        name:"moveViewers"
+      }
+      ]
   }
   },
   methods:{

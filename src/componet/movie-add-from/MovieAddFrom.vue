@@ -4,13 +4,15 @@
    <form class="add-form d-flex" @submit.prevent>
         <input type="text" v-model="name" class="form-control new-movie-label" placeholder="Qanday kino ?" >
         <input type="number" v-model="viewers" class="form-control new-movie-label" placeholder="Nechi marotaba ko'rilgan?" >
-     <button class="btn btn-outline-dark" @click="channge" type="submit">Qo'shish</button>
+     <PharmaryButton @click="channge" type="submit" class="btn-outline-dark">Qo'shish</PharmaryButton>
    </form>
  </div>
 </template>
 
 <script>
+
 export default {
+
 data(){
   return{
     name:"",
