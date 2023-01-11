@@ -13,7 +13,7 @@ export default {
   name:'PharmaryButton',
 }
 </script>
-
+//salom
 <style scoped>
 
 
