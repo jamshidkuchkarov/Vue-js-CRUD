@@ -43,6 +43,8 @@ export default {
      term:'',
      filter:'all',
      isLoading:false,//statu= holat
+     limit:10,
+     page:0,
    }
  },
   methods:{
