@@ -10,8 +10,18 @@
       <div class="movie-list">
         <p class="display-5 text-danger" v-if="!movies.length && !isLoading">Kinolar hozircha yo'q :(</p>
         <div v-else-if="isLoading" class="spinner-border text-danger text-center" role="status">
-           salom
         </div>
+        <nav aria-label="Page  navigation example">
+          <ul class="pagination">
+
+            <li :key="page"
+                v-for="page in  totalPage"
+                class="page-item">
+              <button @click="changePage(page)"  class="page-link" :class="{active: page == this.page}" >{{page}}</button></li>
+
+
+          </ul>
+        </nav>
       </div>
        <MovieAddFrom
            @createMovie="createMovie" ></MovieAddFrom>
@@ -44,13 +54,19 @@ export default {
      filter:'all',
      isLoading:false,//statu= holat
      limit:10,
-     page:0,
+     page:1,
+     totalPage:0,
    }
  },
   methods:{
-    createMovie(items){
-      items.id = this.movies.length+1
-      this.movies.push(items)
+    async createMovie(items){
+      try {
+        const response = await axios.post('https://jsonplaceholder.typicode.com/posts',items)
+        this.movies.push(response.data)
+      }
+      catch (error){
+        alert(error.message)
+      }
     },
     onToggleHandler({id,prop}){
       console.log(prop)
@@ -62,8 +78,16 @@ export default {
 
       })
     },
-    onRemove(id){
-      this.movies = this.movies.filter(c=>c.id!=id)
+    async onRemove(id){
+      try {
+        const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+        console.log(response)
+        this.movies = this.movies.filter(c=>c.id!=id)
+      }
+      catch (error){
+        alert(error.message)
+      }
+
     },
     onSearchHandler(arr,term){
         if(term.length == 0){
@@ -93,15 +117,22 @@ export default {
     async fetchMovie(){
       try {
         this.isLoading = true
-          const {data} = await axios.get('https://jsonplaceholder.typicode.com/posts')
-          const newArr = data.map(item=>({
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts',{
+            params:{
+              _limit: this.limit,
+              _page:this.page
+            }
+          })
+          const newArr = response.data.map(item=>({
             id:item.id,
             name:item.title,
             like:false,
             favourite:false,
             viewers:item.id*10
           }))
-          this.movies = newArr
+        this.totalPage = Math.ceil(response.headers['x-total-count']  /  this.limit)
+        console.log(this.totalPage)
+        this.movies = newArr
       }
       catch (error){
         alert(error.message)
@@ -109,10 +140,11 @@ export default {
       finally {
         this.isLoading=false
       }
-
-
-
     },
+    changePage(page){
+      this.page = page
+      this.fetchMovie()
+    }
   },
   mounted() {
    this.fetchMovie()
